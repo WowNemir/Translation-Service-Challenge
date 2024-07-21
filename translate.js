@@ -1,6 +1,6 @@
 const translate = require('google-translate-extended-api');
 
-// Set default options for translation
+// default options are here as documentation
 const defaultDataOptions = {
     returnRawResponse: false,
     detailedTranslations: true,
@@ -26,17 +26,13 @@ async function runTranslate(word, language, target) {
     }
 }
 
-// Fetch command line arguments
 const args = process.argv.slice(2);
 
-// Check if enough arguments are provided
 if (args.length !== 3) {
     console.error("Usage: node translate.js <word> <source_language> <target_language>");
     process.exit(1);
 }
 
-// Extract arguments
 const [word, language, target] = args;
 
-// Run translation
 runTranslate(word, language, target);

@@ -31,15 +31,16 @@ The **Translation Service Challenge** is a project designed to provide a transla
 
 ## Known Issues and Suggested Enhancements
 
-### 1. Security and Reliability Issues
+### 1. Node.js Script Call Workaround
 
-**The current setup relies on a Node.js subprocess script to interact with third-party APIs for translations and word definitions, given the lack of a Google API for definitions and examples. This method presents several concerns:**
-- **Security**: Executing subprocesses can pose security risks, particularly if the inputs are not thoroughly validated.
-- **Reliability**: Relying on external APIs introduces potential risks if those APIs undergo changes or become unavailable.
+**The current implementation relies on a Node.js subprocess script to interact with third-party APIs for translations and definitions due to the lack of a suitable API for definitions and examples. This approach has several critical drawbacks:**
+
+- **Security Risks**: Executing subprocesses can introduce security vulnerabilities, especially if input validation is not thorough.
+- **Productivity Bottleneck**: This workaround creates a dependency on external APIs, which can become unreliable if these services change or become unavailable.
 
 **Suggested Enhancements**:
-- **Alternative Data Sources**: Explore and assess other APIs or services for obtaining translation and definition data, with a focus on their security and reliability.
-- **API Integration**: Where feasible, integrate directly with more dependable and secure APIs to minimize reliance on subprocesses.
+- **Explore Alternative Data Sources**: Evaluate other APIs or services for translation and definition data, focusing on their security and reliability to minimize risks.
+- **Enhance Feature Optionality**: Use the Google API to handle translations and consider integrating advanced API calls to enrich data with definitions, examples, and synonyms as optional features.
 
 ### 2. Database Design
 

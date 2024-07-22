@@ -10,9 +10,6 @@ client = TestClient(app)
 mock_word_id_1 = str(ObjectId())
 mock_word_id_2 = str(ObjectId())
 
-mock_word_id_1 = str(ObjectId())
-mock_word_id_2 = str(ObjectId())
-
 mock_word_data = {
     "id": mock_word_id_1,
     "language": "en",
@@ -59,8 +56,6 @@ def test_get_word_details_found(mock_translate):
     with patch('db.words_collection.find_one') as mock_find_one:
         mock_find_one.return_value = mock_word_data
         response = client.get("/word/hello?language=en&target_language=de")
-    print(response.json())
-    print(mock_word_data)
     assert response.status_code == 200
     assert response.json() == mock_word_data
 
@@ -111,6 +106,18 @@ def test_get_words_list_exclude_definitions(mock_find):
     
     assert response.status_code == 200
     assert response.json() == mock_data_exclude_definitions
+
+@patch('translate_client.TranslateClient.translate')
+@patch('db.words_collection.find_one')
+def test_get_word_details_not_found(mock_find_one, mock_translate):
+    mock_find_one.return_value = None
+
+    mock_translate.return_value = {}
+
+    response = client.get("/word/nonexistentword?language=en&target_language=de")
+    
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Word not found"}
 
 if __name__ == "__main__":
     pytest.main()

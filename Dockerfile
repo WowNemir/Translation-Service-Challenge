@@ -1,7 +1,10 @@
 FROM python:3.9-slim
 
-# Install Node.js and npm for advanced api usage
-RUN apt-get update && apt-get install -y nodejs npm
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -9,14 +12,12 @@ ENV PYTHONDONTWRITEBYTECODE=1
 WORKDIR /app
 
 COPY requirements.txt ./
-COPY package.json package-lock.json ./
-
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
+COPY package.json package-lock.json ./
 RUN npm install
 
 COPY . /app
 
 EXPOSE 8000
-
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -29,17 +29,17 @@ The **Translation Service Challenge** is a project designed to provide a transla
 - **GET /words/**: List words with optional filtering and pagination.
 - **DELETE /word/{word_id}**: Delete a specific word by ID.
 
-## Known Flaws and Possible Improvements
+## Known Issues and Suggested Enhancements
 
-### 1. Security and Reliability Concerns
+### 1. Security and Reliability Issues
 
-The current implementation uses a Node.js subprocess script to call third-party APIs for translation and word definitions. This approach has several issues:
-- **Security**: Direct subprocess calls can introduce security vulnerabilities, especially if the input is not properly sanitized.
-- **Reliability**: Dependency on third-party services may lead to issues if the external API changes or becomes unavailable.
+*The current setup relies on a Node.js subprocess script to interact with third-party APIs for translations and word definitions, given the lack of a Google API for definitions and examples. This method presents several concerns:*
+- **Security**: Executing subprocesses can pose security risks, particularly if the inputs are not thoroughly validated.
+- **Reliability**: Relying on external APIs introduces potential risks if those APIs undergo changes or become unavailable.
 
-**Possible Improvements**:
-- **Data Gathering**: Consider using alternative APIs or services to fetch translation and definition data. Evaluate services for security and reliability.
-- **Direct API Integration**: Integrate directly with more reliable and secure APIs if possible, reducing reliance on subprocess calls.
+**Suggested Enhancements**:
+- **Alternative Data Sources**: Explore and assess other APIs or services for obtaining translation and definition data, with a focus on their security and reliability.
+- **API Integration**: Where feasible, integrate directly with more dependable and secure APIs to minimize reliance on subprocesses.
 
 ### 2. Database Design
 

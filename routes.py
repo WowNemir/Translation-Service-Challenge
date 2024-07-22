@@ -2,7 +2,7 @@ from typing import Optional
 from fastapi import APIRouter, HTTPException
 from models import Word
 from db import words_collection
-from translate_client import TranslateClient
+from translate_client import NodeScriptError, TranslateClient
 from bson import ObjectId
 
 router = APIRouter()
@@ -12,7 +12,10 @@ router = APIRouter()
 async def get_word_details(word: str, language: str = 'en', target_language='de'):
     word_data = words_collection.find_one({"word": word})
     if not word_data:
-        fetched_word_data = TranslateClient().translate(word, language, target_language)
+        try:
+            fetched_word_data = TranslateClient().translate(word, language, target_language)
+        except NodeScriptError as e:
+            raise HTTPException(status_code=500, detail=f"Translation service error")
         fetched_word_data['language'] = language
         fetched_word_data['targetLanguage'] = target_language
 

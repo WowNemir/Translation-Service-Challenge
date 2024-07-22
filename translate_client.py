@@ -16,14 +16,9 @@ class TranslateClient:
                 text=True, 
                 check=True
             )
-            
-            if result.returncode == 0:
-                data = json.loads(result.stdout)
-                return data
-            else:
-                raise NodeScriptError(f"Error running Node.js script:\n{result.stderr}")
-        
+            data = json.loads(result.stdout)
+            return data
         except subprocess.CalledProcessError as e:
-            raise NodeScriptError(f"Error running subprocess:\n{str(e)}")
+            raise NodeScriptError(f"Error running Node.js script:\n{e.stderr}")
         except json.JSONDecodeError as e:
             raise NodeScriptError(f"Error parsing JSON output:\n{str(e)}")

@@ -9,19 +9,30 @@ router = APIRouter()
 
 
 @router.get("/word/{word}")
-async def get_word_details(word: str, language: str = 'en', target_language='de'):
+async def get_word_details(word: str, language: str = 'en', target_language: str = 'de'):
+    if not word:
+        raise HTTPException(status_code=400, detail="Word parameter cannot be empty")
+    
     word_data = words_collection.find_one({"word": word})
+    
     if not word_data:
         try:
             fetched_word_data = TranslateClient().translate(word, language, target_language)
-        except NodeScriptError as e:
-            raise HTTPException(status_code=500, detail=f"Translation service error")
+        except NodeScriptError:
+            raise HTTPException(status_code=500, detail="Translation service error")
+        
+        if not fetched_word_data or "word" not in fetched_word_data:
+            raise HTTPException(status_code=404, detail="Word not found")
+        
         fetched_word_data['language'] = language
         fetched_word_data['targetLanguage'] = target_language
 
         insert_result = words_collection.insert_one(fetched_word_data)
         
         word_data = words_collection.find_one({"_id": insert_result.inserted_id})
+    
+    if not word_data:
+        raise HTTPException(status_code=500, detail="Failed to retrieve word data")
     
     return Word(**word_data).model_dump(exclude_defaults=True)
 

@@ -33,7 +33,7 @@ The **Translation Service Challenge** is a project designed to provide a transla
 
 ### 1. Security and Reliability Issues
 
-*The current setup relies on a Node.js subprocess script to interact with third-party APIs for translations and word definitions, given the lack of a Google API for definitions and examples. This method presents several concerns:*
+**The current setup relies on a Node.js subprocess script to interact with third-party APIs for translations and word definitions, given the lack of a Google API for definitions and examples. This method presents several concerns:**
 - **Security**: Executing subprocesses can pose security risks, particularly if the inputs are not thoroughly validated.
 - **Reliability**: Relying on external APIs introduces potential risks if those APIs undergo changes or become unavailable.
 

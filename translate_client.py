@@ -16,8 +16,14 @@ class TranslateClient:
                 text=True, 
                 check=True
             )
+            
             data = json.loads(result.stdout)
+            
+            if not data or (not data.get('translations') and not data.get('definitions')):
+                return None
+            
             return data
+        
         except subprocess.CalledProcessError as e:
             raise NodeScriptError(f"Error running Node.js script:\n{e.stderr}")
         except json.JSONDecodeError as e:

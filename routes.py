@@ -1,6 +1,6 @@
 from typing import Optional
 from fastapi import APIRouter, HTTPException
-from models import Word, Translation, Definition
+from models import Word
 from db import words_collection
 from translate_client import TranslateClient
 from bson import ObjectId
@@ -11,15 +11,16 @@ router = APIRouter()
 @router.get("/word/{word}")
 async def get_word_details(word: str, language: str = 'en', target_language='de'):
     word_data = words_collection.find_one({"word": word})
-    if word_data:
-        return Word(**word_data)
-    data_from_google = TranslateClient().translate(word, language, target_language)
-    data_from_google['language'] = language
-    data_from_google['targetLanguage'] = target_language
+    if not word_data:
+        fetched_word_data = TranslateClient().translate(word, language, target_language)
+        fetched_word_data['language'] = language
+        fetched_word_data['targetLanguage'] = target_language
 
-    res = words_collection.insert_one(data_from_google)
-    data_from_google['id'] = res
-    return Word(**data_from_google)
+        insert_result = words_collection.insert_one(fetched_word_data)
+        
+        word_data = words_collection.find_one({"_id": insert_result.inserted_id})
+    
+    return Word(**word_data).model_dump(exclude_defaults=True)
 
 @router.get("/words/")
 async def get_words_list(

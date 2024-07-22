@@ -44,7 +44,7 @@ class Word(MongoModel):
     id: PyObjectId = Field(alias="_id")
     language: str = None
     targetLanguage: str = None
-    word: Optional[str] = None
+    word: str = None
     translation: Optional[str] = None
     wordTranscription: Optional[str] = None
     translationTranscription: Optional[str] = None
@@ -52,11 +52,3 @@ class Word(MongoModel):
     definitions: Optional[Dict[str, List[Definition]]] = None
     examples: Optional[List[str]] = None
     model_config = ConfigDict(arbitrary_types_allowed=True)
-
-    @field_validator("translations", "definitions", mode="before")
-    def convert_empty_lists_to_dicts(cls, values):
-        if 'translations' in values and values['translations'] == []:
-            values['translations'] = {}
-        if 'definitions' in values and values['definitions'] == []:
-            values['definitions'] = {}
-        return values

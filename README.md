@@ -10,8 +10,8 @@ The **Translation Service Challenge** is a project designed to provide a transla
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/WowNemir/Translation-Service-Challenge
+   cd Translation-Service-Challenge
    ```
 
 2. **Build and start the application**:
@@ -21,6 +21,7 @@ The **Translation Service Challenge** is a project designed to provide a transla
 
 3. **Access the application**:
    - The FastAPI application will be available at `http://localhost:8000`.
+   - SwaggerUI `http://localhost:8000/docs`
 
 ### API Endpoints
 
